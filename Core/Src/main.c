@@ -29,6 +29,7 @@
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
 #include "string.h"
+
 #include "ILI9341_Touchscreen.h"
 
 #include "ILI9341_STM32_Driver.h"
@@ -58,10 +59,17 @@
 uint8_t redVal = 0;
 uint8_t greenVal = 0;
 uint8_t blueVal = 0;
+uint8_t redDecimal = 0;
+uint8_t blueDecimal = 0;
+uint8_t greenDecimal = 0;
+uint8_t someVal = 0;
+uint16_t h = 0;
+char someValToString[50] = "";
 char redPercent[50] = "";
 char greenPercent[50] = "";
 char bluePercent[50] = "";
-
+uint16_t result = 0;
+char resultHex[100]  = "";
 
 
 /* USER CODE END PV */
@@ -75,7 +83,28 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+//void displayHEX(uint32_t myNumber){
+//	sprintf(toHex,"0x%08X",myNumber);
+//};
 
+uint16_t rgb888_to_rgb565(uint8_t red8, uint8_t green8, uint8_t blue8) {
+    // Convert 8-bit red to 5-bit red.
+    uint8_t red5 = (uint8_t)((red8 / 255.0) * 31);
+    // Convert 8-bit green to 6-bit green.
+    uint8_t green6 = (uint8_t)((green8 / 255.0) * 63);
+    // Convert 8-bit blue to 5-bit blue.
+    uint8_t blue5 = (uint8_t)((blue8 / 255.0) * 31);
+
+    // Shift the red value to the left by 11 bits.
+    uint16_t red5_shifted = (uint16_t)(red5) << 11;
+    // Shift the green value to the left by 5 bits.
+    uint16_t green6_shifted = (uint16_t)(green6) << 5;
+
+    // Combine the red, green, and blue values.
+    uint16_t rgb565 = red5_shifted | green6_shifted | blue5;
+
+    return rgb565;
+}
 /* USER CODE END 0 */
 
 /**
@@ -134,7 +163,7 @@ int main(void)
 	  		ILI9341_Set_Rotation(SCREEN_HORIZONTAL_1); //กลับข้อความ
 	  		ILI9341_Draw_Text("27.1C", 30, 30, BLACK, 2, WHITE);
 	  		ILI9341_Draw_Text("55.6%RH", 180, 30, BLACK, 2, WHITE);
-	  		ILI9341_Draw_Filled_Circle(160, 30,15, 0X780F);// x , y , r ,color
+	  		ILI9341_Draw_Filled_Circle(160, 30,15, h);// x , y , r ,color
 	  		/////////////////////////////////////////////////////////////////////////
 
 	  		ILI9341_Draw_Filled_Circle(30, 80,15, 0XF800);
@@ -146,11 +175,14 @@ int main(void)
 	  			ILI9341_Draw_Rectangle(50, 70, redVal*10,20, 0XF800);//x , y , lx, ly ,color
 	  			sprintf(redPercent,"%d%%",redVal*10);
 	  			ILI9341_Draw_Text(redPercent, 180, 70, BLACK, 2, WHITE);
-	  			redVal+=1;
 
-	  			if(redVal == 11){
-	  				redVal = 0;
-	  			}
+//	  			redVal+=1;
+//	  			redDecimal+=25;
+
+//	  			if(redVal == 10){
+//	  				redVal = 0;
+//	  				redDecimal=0;
+//	  			}
 	  		}
 	  		////////////////////////////////////green///////////////////////////////////
 	  		ILI9341_Draw_Filled_Circle(30, 130,15, 0X07E0);
@@ -160,11 +192,15 @@ int main(void)
 				ILI9341_Draw_Rectangle(50, 120, greenVal*10,20, 0X07E0);//x , y , lx, ly ,color
 				sprintf(greenPercent,"%d%%",greenVal*10);
 				ILI9341_Draw_Text(greenPercent, 180, 120, BLACK, 2, WHITE);
-				greenVal+=1;
 
-				if(greenVal == 11){
-					greenVal = 0;
-				}
+
+//				greenVal+=1;
+//				greenDecimal+=25;
+
+//				if(greenVal == 11){
+//					greenVal = 0;
+//					greenDecimal = 0;
+//				}
 			}
 			////////////////////////////////////blue///////////////////////////////////
 			ILI9341_Draw_Filled_Circle(30, 180,15, 0X001F);
@@ -174,17 +210,104 @@ int main(void)
 				ILI9341_Draw_Rectangle(50, 170, blueVal*10,20, 0X001F);//x , y , lx, ly ,color
 				sprintf(bluePercent,"%d%%",blueVal*10);
 				ILI9341_Draw_Text(bluePercent, 180, 170, BLACK, 2, WHITE);
-				blueVal+=1;
-
-				if(blueVal == 11){
-					blueVal = 0;
-				}
+				sprintf(someValToString,"%d",blueDecimal);
+				//ILI9341_Draw_Text(someValToString, 180, 210, BLACK, 2, WHITE);
+//				blueVal+=1;
+//				blueDecimal+=25;
+//				if(blueVal == 11){
+//					blueVal = 0;
+//					blueDecimal =0;
+//				}
 			}
 
+			result = rgb888_to_rgb565(redDecimal,greenDecimal, blueDecimal);
+			sprintf(resultHex,"0X%04X", result);
+			ILI9341_Draw_Text(resultHex, 180, 210, BLACK, 2, WHITE);
 
-	  		HAL_Delay(2000);
+			sscanf(resultHex, "%x", &h);
 
-	  		ILI9341_Fill_Screen(WHITE);
+//	  		ILI9341_Fill_Screen(WHITE);
+	  			  		ILI9341_Set_Rotation(SCREEN_HORIZONTAL_1);
+//	  			  		ILI9341_Draw_Text("Touchscreen", 10, 10, BLACK, 2, WHITE);
+//	  			  		ILI9341_Draw_Text("Touch to draw", 10, 30, BLACK, 2, WHITE);
+	  			  		ILI9341_Set_Rotation(SCREEN_VERTICAL_1);
+
+
+//	  			  		while(1)
+//	  			  		{
+
+	  			  			if(TP_Touchpad_Pressed())
+	  			          {
+
+	  			  					uint16_t x_pos = 0;
+	  			  					uint16_t y_pos = 0;
+
+
+	  			  					HAL_GPIO_WritePin(GPIOB, LD3_Pin|LD2_Pin, GPIO_PIN_SET);
+
+	  			            uint16_t position_array[2];
+
+	  			  					if(TP_Read_Coordinates(position_array) == TOUCHPAD_DATA_OK)
+	  			  					{
+	  			  					x_pos = position_array[0];
+	  			  					y_pos = position_array[1];
+	  			  					if((x_pos >= 146 && x_pos <=170) && (y_pos >=6 && y_pos <=34))//RedCheck
+	  			  					{
+	  			  						ILI9341_Draw_Text("r", 180, 210, BLACK, 2, WHITE);
+	  			  						redVal += 1;
+	  			  						redDecimal+=25;
+	  			  						if(redVal == 11){
+	  			  						  	redVal = 0;
+	  			  						  	redDecimal=0;
+	  			  						 }
+	  			  					}
+	  			  					else if((x_pos >= 90 && x_pos <=119) && (y_pos >=9 && y_pos <=60))//GreenCheck
+	  			  					{
+	  			  						ILI9341_Draw_Text("g", 180, 210, BLACK, 2, WHITE);
+	  			  						greenVal += 1;
+	  			  						greenDecimal+=25;
+	  			  						if(greenVal == 11){
+											greenVal = 0;
+											greenDecimal = 0;
+										}
+	  			  					}
+	  			  					else if((x_pos >= 44 && x_pos <=69) && (y_pos >=9 && y_pos <=42))//GreenCheck
+	  			  					{
+	  			  						ILI9341_Draw_Text("b", 180, 210, BLACK, 2, WHITE);
+	  			  						blueVal += 1;
+	  			  						blueDecimal+=25;
+	  			  						if(blueVal == 11){
+											blueVal = 0;
+											blueDecimal =0;
+										}
+	  			  					}
+	  			  					ILI9341_Draw_Filled_Circle(x_pos, y_pos, 2, BLACK);
+
+	  			  					ILI9341_Set_Rotation(SCREEN_HORIZONTAL_1);
+//	  			  					char counter_buff[30];
+//	  			  					sprintf(counter_buff, "POS X: %.3d", x_pos);
+//	  			  					ILI9341_Draw_Text(counter_buff, 10, 80, BLACK, 2, WHITE);
+//	  			  					sprintf(counter_buff, "POS Y: %.3d", y_pos);
+//	  			  					ILI9341_Draw_Text(counter_buff, 10, 120, BLACK, 2, WHITE);
+	  			  					ILI9341_Set_Rotation(SCREEN_VERTICAL_1);
+	  			  					}
+
+//	  			  					ILI9341_Draw_Pixel(x_pos, y_pos, BLACK);
+
+	  			          }
+	  			  			else
+	  			  			{
+	  			  				HAL_GPIO_WritePin(GPIOB, LD3_Pin|LD2_Pin, GPIO_PIN_RESET);
+	  			  			}
+
+//	  			  		}
+
+
+//	  		ILI9341_Fill_Screen(WHITE);
+
+
+	  		HAL_Delay(1000);
+
 
 
 
