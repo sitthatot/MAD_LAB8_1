@@ -36,6 +36,7 @@
 #include "ILI9341_GFX.h"
 
 #include "snow_tiger.h"
+#include "tot.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -70,6 +71,7 @@ char greenPercent[50] = "";
 char bluePercent[50] = "";
 uint16_t result = 0;
 char resultHex[100]  = "";
+uint8_t toSecondPage = 0;
 
 
 /* USER CODE END PV */
@@ -281,6 +283,11 @@ int main(void)
 											blueDecimal =0;
 										}
 	  			  					}
+	  			  					else if((x_pos >= 200 && x_pos <=231) && (y_pos >=145 && y_pos <=176))//Center Top
+	  			  					{
+	  			  						ILI9341_Draw_Text("c", 180, 210, BLACK, 2, WHITE);
+	  			  						toSecondPage = 1;
+	  			  					}
 	  			  					ILI9341_Draw_Filled_Circle(x_pos, y_pos, 2, BLACK);
 
 	  			  					ILI9341_Set_Rotation(SCREEN_HORIZONTAL_1);
@@ -304,9 +311,21 @@ int main(void)
 
 
 //	  		ILI9341_Fill_Screen(WHITE);
+	  			  		while(toSecondPage){
+	  			  			ILI9341_Fill_Screen(WHITE);
+							ILI9341_Set_Rotation(SCREEN_HORIZONTAL_1);
+							ILI9341_Draw_Text("Group No.11", 135, 40, h, 2, WHITE);
+							ILI9341_Draw_Text("Sittha", 135, 80, h, 2, WHITE);
+							ILI9341_Draw_Text("Onsaard", 135, 120, h, 2, WHITE);
+							ILI9341_Draw_Text("64010889", 135, 160, h, 2, WHITE);
+							HAL_Delay(2000);
+							ILI9341_Draw_Image((const char*)snow_tiger, SCREEN_VERTICAL_1);
+							ILI9341_Set_Rotation(SCREEN_HORIZONTAL_1);
+	  			  			HAL_Delay(3000);
+	  			  			toSecondPage=0;
+	  			  		}
 
-
-	  		HAL_Delay(1000);
+	  		HAL_Delay(20);
 
 
 

@@ -37,7 +37,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  D:/KMITL/3D/semester\ 1/Microcontroller/MAD_LAB/767_SPI_ILI9341_2/Drivers/ILI9341/ILI9341_Touchscreen.h \
  D:/KMITL/3D/semester\ 1/Microcontroller/MAD_LAB/767_SPI_ILI9341_2/Drivers/ILI9341/ILI9341_STM32_Driver.h \
  D:/KMITL/3D/semester\ 1/Microcontroller/MAD_LAB/767_SPI_ILI9341_2/Drivers/ILI9341/ILI9341_GFX.h \
- D:/KMITL/3D/semester\ 1/Microcontroller/MAD_LAB/767_SPI_ILI9341_2/Drivers/ILI9341/snow_tiger.h
+ D:/KMITL/3D/semester\ 1/Microcontroller/MAD_LAB/767_SPI_ILI9341_2/Drivers/ILI9341/snow_tiger.h \
+ D:/KMITL/3D/semester\ 1/Microcontroller/MAD_LAB/767_SPI_ILI9341_2/Drivers/ILI9341/telet.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:
@@ -82,3 +83,4 @@ D:/KMITL/3D/semester\ 1/Microcontroller/MAD_LAB/767_SPI_ILI9341_2/Drivers/ILI934
 D:/KMITL/3D/semester\ 1/Microcontroller/MAD_LAB/767_SPI_ILI9341_2/Drivers/ILI9341/ILI9341_STM32_Driver.h:
 D:/KMITL/3D/semester\ 1/Microcontroller/MAD_LAB/767_SPI_ILI9341_2/Drivers/ILI9341/ILI9341_GFX.h:
 D:/KMITL/3D/semester\ 1/Microcontroller/MAD_LAB/767_SPI_ILI9341_2/Drivers/ILI9341/snow_tiger.h:
+D:/KMITL/3D/semester\ 1/Microcontroller/MAD_LAB/767_SPI_ILI9341_2/Drivers/ILI9341/telet.h:
