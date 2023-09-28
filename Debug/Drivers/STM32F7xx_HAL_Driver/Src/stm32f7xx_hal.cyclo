@@ -27,5 +27,5 @@
 ../Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c:540:6:HAL_DisableCompensationCell	1
 ../Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c:553:6:HAL_EnableFMCMemorySwapping	1
 ../Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c:566:6:HAL_DisableFMCMemorySwapping	1
-../Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c:583:6:HAL_EnableMemorySwappingBank	1
-../Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c:598:6:HAL_DisableMemorySwappingBank	1
+../Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c:582:6:HAL_EnableMemorySwappingBank	1
+../Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c:597:6:HAL_DisableMemorySwappingBank	1

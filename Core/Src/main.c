@@ -148,8 +148,11 @@ int main(void)
   MX_SPI5_Init();
   MX_TIM1_Init();
   MX_RNG_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   ILI9341_Init();//initial driver setup to drive ili9341
+  HAL_TIM_Base_Start_IT(&htim1);
+  HAL_TIM_Base_Start_IT(&htim2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -163,7 +166,7 @@ int main(void)
 
 	  //----------------------------------------------------------PERFORMANCE TEST
 	  		ILI9341_Fill_Screen(WHITE);
-	  		ILI9341_Set_Rotation(SCREEN_HORIZONTAL_1); //กลับข้อความ
+	  		ILI9341_Set_Rotation(SCREEN_HORIZONTAL_1); //�?ลับข้อความ
 	  		ILI9341_Draw_Text("27.1C", 30, 30, BLACK, 2, WHITE);
 	  		ILI9341_Draw_Text("55.6%RH", 180, 30, BLACK, 2, WHITE);
 	  		ILI9341_Draw_Filled_Circle(160, 30,15, h);// x , y , r ,color
@@ -329,8 +332,8 @@ int main(void)
 
 									HAL_GPIO_WritePin(GPIOB, LD3_Pin|LD2_Pin, GPIO_PIN_SET);
 
-							uint16_t position_array[2];
 
+							uint16_t position_array[2];
 									if(TP_Read_Coordinates(position_array) == TOUCHPAD_DATA_OK)
 									{
 									x_pos = position_array[0];
@@ -342,8 +345,8 @@ int main(void)
 									else
 									{
 										//still 5 s
-										HAL_Delay(5000);
-										toSecondPage = 0;
+//										HAL_Delay(5000);
+//										toSecondPage = 0;
 									}
 									}
 									}
@@ -369,15 +372,16 @@ void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
 
   /** Configure LSE Drive Capability
   */
   HAL_PWR_EnableBkUpAccess();
+
   /** Configure the main internal regulator output voltage
   */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
@@ -386,7 +390,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 4;
-  RCC_OscInitStruct.PLL.PLLN = 200;
+  RCC_OscInitStruct.PLL.PLLN = 216;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = 9;
   RCC_OscInitStruct.PLL.PLLR = 2;
@@ -394,12 +398,14 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+
   /** Activate the Over-Drive mode
   */
   if (HAL_PWREx_EnableOverDrive() != HAL_OK)
   {
     Error_Handler();
   }
+
   /** Initializes the CPU, AHB and APB buses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
@@ -409,14 +415,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_6) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USART3|RCC_PERIPHCLK_CLK48;
-  PeriphClkInitStruct.Usart3ClockSelection = RCC_USART3CLKSOURCE_PCLK1;
-  PeriphClkInitStruct.Clk48ClockSelection = RCC_CLK48SOURCE_PLL;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK)
   {
     Error_Handler();
   }
@@ -456,5 +455,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -2,5 +2,5 @@
 ../Drivers/CMSIS/Include/core_cm7.h:2281:22:SCB_EnableDCache	24	static,ignoring_inline_asm
 ../Core/Src/main.c:93:10:rgb888_to_rgb565	32	static
 ../Core/Src/main.c:117:5:main	32	static
-../Core/Src/main.c:368:6:SystemClock_Config	232	static
-../Core/Src/main.c:433:6:Error_Handler	4	static
+../Core/Src/main.c:371:6:SystemClock_Config	88	static
+../Core/Src/main.c:432:6:Error_Handler	4	static
