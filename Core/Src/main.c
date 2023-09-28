@@ -35,8 +35,9 @@
 #include "ILI9341_STM32_Driver.h"
 #include "ILI9341_GFX.h"
 
-#include "snow_tiger.h"
-#include "tot.h"
+//#include "snow_tiger.h"
+
+#include "tot_resize.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -312,17 +313,40 @@ int main(void)
 
 //	  		ILI9341_Fill_Screen(WHITE);
 	  			  		while(toSecondPage){
-	  			  			ILI9341_Fill_Screen(WHITE);
+//	  			  			ILI9341_Fill_Screen(WHITE);
+							ILI9341_Draw_Image((const char*)image_data_tot, SCREEN_VERTICAL_1);
 							ILI9341_Set_Rotation(SCREEN_HORIZONTAL_1);
 							ILI9341_Draw_Text("Group No.11", 135, 40, h, 2, WHITE);
 							ILI9341_Draw_Text("Sittha", 135, 80, h, 2, WHITE);
 							ILI9341_Draw_Text("Onsaard", 135, 120, h, 2, WHITE);
 							ILI9341_Draw_Text("64010889", 135, 160, h, 2, WHITE);
-							HAL_Delay(2000);
-							ILI9341_Draw_Image((const char*)snow_tiger, SCREEN_VERTICAL_1);
 							ILI9341_Set_Rotation(SCREEN_HORIZONTAL_1);
-	  			  			HAL_Delay(3000);
-	  			  			toSecondPage=0;
+							if(TP_Touchpad_Pressed())
+						  {
+
+									uint16_t x_pos = 0;
+									uint16_t y_pos = 0;
+
+									HAL_GPIO_WritePin(GPIOB, LD3_Pin|LD2_Pin, GPIO_PIN_SET);
+
+							uint16_t position_array[2];
+
+									if(TP_Read_Coordinates(position_array) == TOUCHPAD_DATA_OK)
+									{
+									x_pos = position_array[0];
+									y_pos = position_array[1];
+									if((x_pos >= 83 && x_pos <=178) && (y_pos >=8 && y_pos <=99))//IMG check
+									{
+										toSecondPage = 0;
+									}
+									else
+									{
+										//still 5 s
+										HAL_Delay(5000);
+										toSecondPage = 0;
+									}
+									}
+									}
 	  			  		}
 
 	  		HAL_Delay(20);
